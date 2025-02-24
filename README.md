@@ -8,9 +8,8 @@ This bash script converts an SVG file to PNG icons for various resolutions and p
   To install Inkscape on a Debian-based system, use:
   ```bash
   sudo apt install inkscape
-
-    Root Privileges: The script needs root access to modify files in system directories like /usr/share/icons/hicolor.
   ```
+  The script needs root access to modify files in system directories like /usr/share/icons/hicolor.
   
 ## Usage
 Command Syntax:
