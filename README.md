@@ -20,7 +20,7 @@ sudo ./this_script.sh /path/to/new_icon.svg
 
 Parameters:
 
-    /path/to/input.svg: Path to the SVG file that you want to replace you app icon with. **The .SVG file MUST have the same name as the icon you wish to replace.**
+**/path/to/input.svg**: Path to the SVG file that you want to replace you app icon with. **The .SVG file MUST have the same name as the icon you wish to replace.**
 
 Note: You must run the script as root to make changes to the system icon directories. This is not required for modifying the user directories.
 Script Workflow
