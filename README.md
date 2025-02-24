@@ -1,5 +1,76 @@
 # Linux-Replace-App-Icons
-A simple bash script to customize desktop icons in Linux (Debian-based systems).
+This bash script converts an SVG file to PNG icons for various resolutions and places them in the appropriate directories for system-wide or user-specific icons.
+
+## Requirements
+
+- **Inkscape**: The script uses Inkscape to convert the SVG file to PNG format. You need to have Inkscape installed to run this script.
+  
+  To install Inkscape on a Debian-based system, use:
+  ```bash
+  sudo apt install inkscape
+
+    Root Privileges: The script needs root access to modify files in system directories like /usr/share/icons/hicolor.
+  ```
+  
+## Usage
+Command Syntax:
+
+```
+sudo ./this_script.sh /path/to/new_icon.svg
+```
+
+Parameters:
+
+    /path/to/input.svg: Path to the SVG file that you want to replace you app icon with. **The .SVG file MUST have the same name as the icon you wish to replace.**
+
+Note: You must run the script as root to make changes to the system icon directories. This is not required for modifying the user directories.
+Script Workflow
+
+    Initial Setup:
+        The script checks if it is run as root.
+        It verifies whether Inkscape is installed on the system.
+
+    Directory Locations:
+        The script will check for icons in two directories:
+            User-specific icons: $HOME/.icons/hicolor
+            System-wide icons: /usr/share/icons/hicolor
+
+    Resolution Directories:
+        It searches for folders with resolutions like 16x16, 32x32, 48x48, etc., inside the 'apps' folder within these directories.
+        For each resolution that contains an icon who's name matches the input .SVG, the script will replace the existing PNG icon. If not match is found in a folder then that folder will be skipped.
+
+    Changes Confirmation:
+        The script outputs a list of all changes it plans to make.
+        You will be asked to confirm whether you want to proceed with these changes.
+
+    Icon Conversion:
+        If you confirm, Inkscape will be used to convert the input SVG to PNG images for each resolution folder.
+
+## Example
+
+To convert a my_icon.svg file into PNG icons for multiple resolutions:
+
+sudo ./this_script.sh /path/to/my_icon.svg
+
+You will be prompted with the changes that will be made, like:
+
+Found existing /usr/share/icons/hicolor/16x16/apps/icon.png. It will be replaced.
+Found existing /usr/share/icons/hicolor/32x32/apps/icon.png. It will be replaced.
+Found no existing /home/user/.icons/hicolor/48x48/apps/icon.png. It will be skipped.
+
+Once confirmed, the script will proceed to convert and place the PNG icons in the respective directories.
+Notes
+
+    The script assumes that the input SVG is properly formatted for icon creation.
+
+## Troubleshooting
+
+    Inkscape Not Installed: If Inkscape is not found, install it using sudo apt install inkscape.
+    Permission Issues: Make sure the script is run with root privileges when modifying system directories.
+
+## License
+
+This script is licensed under the MIT License. Feel free to modify and use it as needed!
 
 ```
 #!/bin/bash
@@ -59,8 +130,7 @@ process_resolutions() {
                 echo "Found existing $target_png. It will be replaced."
                 changes+=("Replace: $target_png")
             else
-                echo "No existing $target_png found. It will be created."
-                changes+=("Create: $target_png")
+                echo "No existing PNG found for $base_name in $resolution_dir. Skipping creation."
             fi
         else
             echo "No 'apps' folder found in $resolution_dir. Skipping."
@@ -86,21 +156,23 @@ if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
     exit 0
 fi
 
-# Execute the changes
+# Execute the changes (replace the existing PNGs)
 for resolution_dir in "$USER_BASE_DIR"/*x* "$SYSTEM_BASE_DIR"/*x*; do
     if [ -d "$resolution_dir/apps" ]; then
         resolution=$(basename "$resolution_dir")
         base_name=$(basename "$INPUT_SVG" .svg)
         target_png="$resolution_dir/apps/$base_name.png"
 
-        # Replace or create the PNG file
-        inkscape "$INPUT_SVG" --export-type=png --export-filename="$target_png" --export-width="${resolution%x*}" --export-height="${resolution#*x}"
-        
-        # Confirm creation
+        # Replace the PNG file if it exists
         if [ -f "$target_png" ]; then
-            echo "Successfully created $target_png"
-        else
-            echo "Failed to create $target_png"
+            inkscape "$INPUT_SVG" --export-type=png --export-filename="$target_png" --export-width="${resolution%x*}" --export-height="${resolution#*x}"
+            
+            # Confirm replacement
+            if [ -f "$target_png" ]; then
+                echo "Successfully replaced $target_png"
+            else
+                echo "Failed to replace $target_png"
+            fi
         fi
     fi
 done
