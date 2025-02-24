@@ -50,28 +50,20 @@ sudo ./this_script.sh /path/to/new_icon.svg
 
 To convert a my_icon.svg file into PNG icons for multiple resolutions:
 
+```
 sudo ./this_script.sh /path/to/my_icon.svg
+```
 
 You will be prompted with the changes that will be made, like:
 
-Found existing /usr/share/icons/hicolor/16x16/apps/icon.png. It will be replaced.
-Found existing /usr/share/icons/hicolor/32x32/apps/icon.png. It will be replaced.
-Found no existing /home/user/.icons/hicolor/48x48/apps/icon.png. It will be skipped.
+> Found existing /usr/share/icons/hicolor/16x16/apps/icon.png. It will be replaced.
+> Found existing /usr/share/icons/hicolor/32x32/apps/icon.png. It will be replaced.
+> Found no existing /home/user/.icons/hicolor/48x48/apps/icon.png. It will be skipped.
 
 Once confirmed, the script will proceed to convert and place the PNG icons in the respective directories.
 Notes
 
-    The script assumes that the input SVG is properly formatted for icon creation.
-
-## Troubleshooting
-
-    Inkscape Not Installed: If Inkscape is not found, install it using sudo apt install inkscape.
-    Permission Issues: Make sure the script is run with root privileges when modifying system directories.
-
-## License
-
-This script is licensed under the MIT License. Feel free to modify and use it as needed!
-
+## Script
 ```
 #!/bin/bash
 
@@ -179,3 +171,13 @@ done
 
 echo "Icon update process complete!"
 ```
+
+## Troubleshooting
+```
+Inkscape Not Installed: If Inkscape is not found, install it using sudo apt install inkscape.
+Permission Issues: Make sure the script is run with root privileges when modifying system directories.
+```
+
+## License
+
+This script is licensed under the MIT License. Feel free to modify and use it as needed!
