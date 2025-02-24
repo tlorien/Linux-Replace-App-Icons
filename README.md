@@ -63,7 +63,6 @@ You will be prompted with the changes that will be made, like:
 > Found no existing /home/user/.icons/hicolor/48x48/apps/icon.png. It will be skipped.
 
 Once confirmed, the script will proceed to convert and place the PNG icons in the respective directories.
-Notes
 
 ## Script
 ```
